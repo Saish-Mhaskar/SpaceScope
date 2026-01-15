@@ -1,0 +1,305 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Deep space dark background */
+  --background: oklch(0.08 0.01 260);
+  --foreground: oklch(0.95 0.01 260);
+
+  /* Glassmorphism panels */
+  --card: oklch(0.12 0.02 260 / 0.6);
+  --card-foreground: oklch(0.95 0.01 260);
+
+  --popover: oklch(0.1 0.02 260 / 0.9);
+  --popover-foreground: oklch(0.95 0.01 260);
+
+  /* Neon cyan primary */
+  --primary: oklch(0.75 0.18 195);
+  --primary-foreground: oklch(0.1 0.02 260);
+
+  /* Deep space secondary */
+  --secondary: oklch(0.18 0.03 260);
+  --secondary-foreground: oklch(0.9 0.01 260);
+
+  --muted: oklch(0.15 0.02 260);
+  --muted-foreground: oklch(0.65 0.02 260);
+
+  /* Accent - soft purple glow */
+  --accent: oklch(0.6 0.15 280);
+  --accent-foreground: oklch(0.95 0.01 260);
+
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.95 0.01 0);
+
+  --border: oklch(0.3 0.05 260 / 0.3);
+  --input: oklch(0.15 0.02 260);
+  --ring: oklch(0.75 0.18 195);
+
+  /* Chart colors - space palette */
+  --chart-1: oklch(0.75 0.18 195);
+  --chart-2: oklch(0.6 0.15 280);
+  --chart-3: oklch(0.7 0.15 150);
+  --chart-4: oklch(0.8 0.15 60);
+  --chart-5: oklch(0.65 0.2 340);
+
+  --radius: 0.75rem;
+
+  /* Sidebar variables */
+  --sidebar: oklch(0.1 0.02 260);
+  --sidebar-foreground: oklch(0.95 0.01 260);
+  --sidebar-primary: oklch(0.75 0.18 195);
+  --sidebar-primary-foreground: oklch(0.1 0.02 260);
+  --sidebar-accent: oklch(0.18 0.03 260);
+  --sidebar-accent-foreground: oklch(0.95 0.01 260);
+  --sidebar-border: oklch(0.3 0.05 260 / 0.3);
+  --sidebar-ring: oklch(0.75 0.18 195);
+
+  /* Glow colors */
+  --glow-primary: oklch(0.75 0.18 195 / 0.4);
+  --glow-accent: oklch(0.6 0.15 280 / 0.3);
+
+  /* Star colors */
+  --star-white: oklch(0.98 0.01 260);
+  --star-blue: oklch(0.8 0.15 220);
+  --star-yellow: oklch(0.9 0.15 90);
+}
+
+.dark {
+  /* Already dark by default for space theme */
+}
+
+@theme inline {
+  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-glow-primary: var(--glow-primary);
+  --color-glow-accent: var(--glow-accent);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utilities for space theme */
+@layer utilities {
+  .glass {
+    @apply bg-card backdrop-blur-xl border border-border;
+  }
+
+  .glass-strong {
+    @apply bg-secondary/80 backdrop-blur-2xl border border-border;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px var(--glow-primary), 0 0 40px var(--glow-primary);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px var(--glow-accent), 0 0 40px var(--glow-accent);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px var(--glow-primary), 0 0 20px var(--glow-primary);
+  }
+
+  .neon-border {
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 10px var(--glow-primary), inset 0 0 10px var(--glow-primary);
+  }
+}
+
+/* Starfield animation */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--glow-primary), 0 0 40px var(--glow-primary);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--glow-primary), 0 0 60px var(--glow-primary);
+  }
+}
+
+/* Earth rotation keyframe for texture-based Earth */
+@keyframes earthRotate {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.earth-sphere {
+  animation: earthRotate 60s linear infinite;
+}
+
+/* Enhanced timeline rail with sci-fi glow */
+@keyframes timeline-energy-pulse {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+}
+
+.timeline-rail {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 255, 0.1) 0%,
+    rgba(0, 255, 255, 0.6) 20%,
+    rgba(0, 255, 255, 0.8) 50%,
+    rgba(0, 255, 255, 0.6) 80%,
+    rgba(0, 255, 255, 0.1) 100%
+  );
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3), 0 0 40px rgba(0, 255, 255, 0.15);
+  position: relative;
+  overflow: visible;
+}
+
+.timeline-pulse {
+  position: absolute;
+  inset: -2px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 255, 255, 0.3) 40%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(0, 255, 255, 0.3) 60%,
+    transparent 100%
+  );
+  animation: timeline-energy-pulse 4s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+/* Legacy timeline-line support */
+.timeline-line {
+  height: 2px;
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0.15));
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(0, 255, 255, 0.8), transparent);
+  animation: timeline-energy-pulse 3s linear infinite;
+}
+
+.timeline-dot {
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.4);
+}
+
+/* Global animated starfield background */
+.starfield {
+  position: relative;
+  background:
+    radial-gradient(1px 1px at 20% 30%, var(--star-white), transparent),
+    radial-gradient(1px 1px at 80% 40%, var(--star-blue), transparent),
+    radial-gradient(1px 1px at 50% 70%, var(--star-yellow), transparent),
+    radial-gradient(1px 1px at 10% 90%, var(--star-white), transparent),
+    radial-gradient(1px 1px at 90% 10%, var(--star-blue), transparent);
+  background-size: 400px 400px;
+}
+
+.starfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 30% 60%, var(--star-white), transparent),
+    radial-gradient(1px 1px at 70% 20%, var(--star-blue), transparent);
+  opacity: 0.6;
+  animation: twinkle 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.card-hover {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 0 25px var(--glow-primary),
+    0 0 60px var(--glow-primary);
+}
