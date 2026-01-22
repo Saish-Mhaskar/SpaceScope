@@ -87,18 +87,18 @@ export default function HomePage() {
                 Missions, satellites, constellations, and live cosmic events — all in one immersive experience.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/missions">
-                  <Button size="lg" className="glow-primary text-base px-8">
-                    Explore Missions
+              <div className="flex flex-col items-center lg:items-start gap-3">
+                <Link href="/mysky">
+                  <Button size="lg" className="glow-primary text-base px-10">
+                    Explore My Sky
                   </Button>
                 </Link>
-                <Link href="/timeline">
-                  <Button size="lg" variant="outline" className="text-base px-8 bg-transparent">
-                    View Timeline
-                  </Button>
-                </Link>
+
+                <span className="text-sm text-muted-foreground">
+                  Personalized sky view based on your location & time
+                </span>
               </div>
+
             </motion.div>
 
             {/* Earth Globe */}
@@ -164,16 +164,21 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center glass rounded-3xl p-12 border border-border/50"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Ready to Launch Your Journey?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              Ready to See the Sky Like Never Before?
+            </h2>
+
             <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Start exploring the interactive timeline and discover the milestones that shaped our understanding of the
-              cosmos.
+              My Sky gives you a personalized view of the night sky based on your location, time, and celestial events happening
+              right now.
             </p>
-            <Link href="/timeline">
+
+            <Link href="/mysky">
               <Button size="lg" className="glow-primary text-base px-10">
-                Launch Timeline
+                Enter My Sky
               </Button>
             </Link>
+
           </motion.div>
         </section>
 
