@@ -25,7 +25,7 @@ export function Starfield() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
       style={{
         background:
           "radial-gradient(ellipse at center, oklch(0.12 0.02 260) 0%, oklch(0.06 0.01 260) 50%, oklch(0.03 0.01 260) 100%)",
@@ -41,7 +41,11 @@ export function Starfield() {
             width: star.size,
             height: star.size,
             backgroundColor:
-              i % 10 === 0 ? "oklch(0.8 0.15 220)" : i % 15 === 0 ? "oklch(0.9 0.15 90)" : "oklch(0.98 0.01 260)",
+              i % 10 === 0
+                ? "oklch(0.8 0.15 220)"
+                : i % 15 === 0
+                ? "oklch(0.9 0.15 90)"
+                : "oklch(0.98 0.01 260)",
           }}
           animate={{
             opacity: [star.opacity * 0.5, star.opacity, star.opacity * 0.5],

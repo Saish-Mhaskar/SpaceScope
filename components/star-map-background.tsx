@@ -40,7 +40,7 @@ export function StarMapBackground() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
       style={{
         background:
           "radial-gradient(ellipse at center, oklch(0.1 0.02 260) 0%, oklch(0.05 0.01 260) 50%, oklch(0.02 0.01 260) 100%)",
@@ -52,7 +52,9 @@ export function StarMapBackground() {
           key={layerIndex}
           className="absolute inset-0"
           style={{
-            transform: `translate(${(mousePos.x - 0.5) * parallaxFactor * 100}px, ${(mousePos.y - 0.5) * parallaxFactor * 100}px)`,
+            transform: `translate(${(mousePos.x - 0.5) * parallaxFactor * 100}px, ${
+              (mousePos.y - 0.5) * parallaxFactor * 100
+            }px)`,
             transition: "transform 0.3s ease-out",
           }}
         >
@@ -65,7 +67,8 @@ export function StarMapBackground() {
                 top: `${star.y}%`,
                 width: star.size * (1 + layerIndex * 0.3),
                 height: star.size * (1 + layerIndex * 0.3),
-                backgroundColor: layerIndex === 2 ? "oklch(0.85 0.12 200)" : "oklch(0.95 0.02 260)",
+                backgroundColor:
+                  layerIndex === 2 ? "oklch(0.85 0.12 200)" : "oklch(0.95 0.02 260)",
               }}
               animate={{
                 opacity: [star.brightness * 0.5, star.brightness, star.brightness * 0.5],
