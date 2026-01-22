@@ -18,7 +18,8 @@ export default function LearnPage() {
       <PageTransition>
         <div className="pt-24 pb-16 px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Header */}
+
+            {/* ===== HEADER ===== */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -38,20 +39,29 @@ export default function LearnPage() {
                 <span className="text-foreground">Learning </span>
                 <span className="text-primary text-glow">Hub</span>
               </h1>
+
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Discover the science behind space exploration. From rocket propulsion to black holes, expand your
-                knowledge of the cosmos.
+                Discover the science behind space exploration. From rocket propulsion to black holes,
+                expand your knowledge of the cosmos.
+              </p>
+
+              <p className="mt-4 text-sm text-muted-foreground/80">
+                Select a topic to begin 🚀
               </p>
             </motion.div>
 
-            {/* Learning Topics */}
+            {/* ===== LEARNING TOPICS ===== */}
             <div className="space-y-6">
               {learningTopics.map((topic, index) => (
-                <LearningCard key={topic.id} topic={topic} index={index} />
+                <LearningCard
+                  key={topic.id}
+                  topic={topic}
+                  index={index}
+                />
               ))}
             </div>
 
-            {/* Fun fact */}
+            {/* ===== FUN FACT ===== */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -60,10 +70,11 @@ export default function LearnPage() {
             >
               <p className="text-sm text-accent mb-2">Did you know?</p>
               <p className="text-foreground">
-                A day on Venus is longer than a year on Venus. It takes 243 Earth days to rotate once, but only 225
-                Earth days to orbit the Sun!
+                A day on Venus is longer than a year on Venus.
+                It takes 243 Earth days to rotate once, but only 225 Earth days to orbit the Sun!
               </p>
             </motion.div>
+
           </div>
         </div>
       </PageTransition>
