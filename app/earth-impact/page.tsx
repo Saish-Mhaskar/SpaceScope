@@ -1,11 +1,25 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Navigation } from "@/components/navigation"
 import { EarthGlobe } from "@/components/earth-globe"
 
-/* ================= DATA ================= */
+/* ================= TYPES ================= */
+
+type ImpactStat = {
+  label: string
+  value: string
+  trend: string
+}
+
+type EarthImpactResponse = {
+  impactStats: ImpactStat[]
+  recentEvents: string[]
+  tabInsights: Record<string, string[]>
+}
+
+/* ================= UI CONSTANTS ================= */
 
 const layers = [
   "Fires",
@@ -24,54 +38,58 @@ const tabs = [
   "Infrastructure",
 ]
 
-const impactStats = [
-  { label: "Active Wildfires", value: "1,284", trend: "+3%" },
-  { label: "Flood Alerts", value: "62", trend: "−8%" },
-  { label: "Storm Systems", value: "14", trend: "Stable" },
-  { label: "Avg Temp Anomaly", value: "+1.2°C", trend: "↑" },
-  { label: "CO₂ Concentration", value: "421 ppm", trend: "Record High" },
-]
-
-const recentEvents = [
-  "🔥 Australia Bushfires — Updated 2h ago",
-  "🌊 Bangladesh Floods — Moderate Risk",
-  "🌪 Atlantic Storm — Developing",
-  "❄ Arctic Ice Loss — Accelerating",
-]
-
-const tabInsights: Record<string, string[]> = {
-  Climate: [
-    "Global temperature trend rising steadily",
-    "Polar ice loss accelerating",
-    "Oceans absorbing record heat levels",
-  ],
-  Disasters: [
-    "Wildfire frequency increasing in southern regions",
-    "Flood risks elevated due to monsoon patterns",
-    "Storm intensity slightly above average",
-  ],
-  Agriculture: [
-    "Crop stress detected in arid zones",
-    "Vegetation health improving in temperate regions",
-    "Satellite NDVI monitoring active",
-  ],
-  Pollution: [
-    "Urban air quality declining in megacities",
-    "CO₂ emissions at record levels",
-    "Satellite aerosol tracking enabled",
-  ],
-  Infrastructure: [
-    "Flood‑prone infrastructure under observation",
-    "Coastal erosion affecting ports",
-    "Urban heat island effects increasing",
-  ],
-}
-
 /* ================= PAGE ================= */
 
 export default function EarthImpactPage() {
   const [activeLayers, setActiveLayers] = useState<string[]>(layers)
   const [activeTab, setActiveTab] = useState("Climate")
+  const [data, setData] = useState<EarthImpactResponse>({
+    impactStats: [],
+    recentEvents: [],
+    tabInsights: {},
+  })
+  const [loading, setLoading] = useState(true)
+
+  /* ===== FETCH API DATA ===== */
+  useEffect(() => {
+  let mounted = true
+
+  fetch("/api/earth-impact")
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(text || "API failed")
+      }
+      return res.json()
+    })
+    .then(json => {
+      if (!mounted) return
+
+      setData({
+        impactStats: json.impactStats ?? [],
+        recentEvents: json.recentEvents ?? [],
+        tabInsights: json.tabInsights ?? {},
+      })
+    })
+    .catch(err => {
+      console.error("Earth Impact API error:", err)
+
+      // fail-safe empty state
+      setData({
+        impactStats: [],
+        recentEvents: ["⚠ Unable to load live Earth impact data"],
+        tabInsights: {},
+      })
+    })
+    .finally(() => {
+      if (mounted) setLoading(false)
+    })
+
+  return () => {
+    mounted = false
+  }
+}, [])
+
 
   const toggleLayer = (layer: string) => {
     setActiveLayers(prev =>
@@ -81,13 +99,20 @@ export default function EarthImpactPage() {
     )
   }
 
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-white">
+        Loading Earth impact data…
+      </main>
+    )
+  }
+
   return (
     <>
-      {/* Global Navigation */}
       <Navigation />
 
       <div className="relative min-h-screen px-6 pt-28 pb-16 text-white starfield">
-        {/* Header */}
+        {/* ================= HEADER ================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,13 +123,13 @@ export default function EarthImpactPage() {
           </h1>
           <p className="text-white/70 max-w-2xl">
             Monitor Earth’s climate, disasters, and environmental impact using
-            satellite‑based insights.
+            satellite-based insights.
           </p>
         </motion.div>
 
-        {/* Main Grid */}
+        {/* ================= MAIN GRID ================= */}
         <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-8">
-          {/* Earth Visualization */}
+          {/* Earth Globe */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -114,10 +139,10 @@ export default function EarthImpactPage() {
               <EarthGlobe />
             </div>
 
-            {/* Overlayed Signals */}
+            {/* Overlay Signals (visual only) */}
             <div className="absolute inset-0 pointer-events-none">
               {activeLayers.includes("Fires") && (
-                <div className="absolute top-[45%] left-[60%] w-3 h-3 bg-orange-500 rounded-full animate-pulse shadow-lg" />
+                <div className="absolute top-[45%] left-[60%] w-3 h-3 bg-orange-500 rounded-full animate-pulse" />
               )}
               {activeLayers.includes("Floods") && (
                 <div className="absolute top-[55%] left-[48%] w-4 h-4 bg-blue-400 rounded-full blur-sm" />
@@ -127,9 +152,9 @@ export default function EarthImpactPage() {
               )}
             </div>
 
-            {/* Active Layers Legend */}
+            {/* Active Layers */}
             <div className="absolute bottom-4 left-4 glass rounded-lg px-4 py-3 text-xs">
-              <p className="text-white font-medium mb-1">Active Layers</p>
+              <p className="font-medium mb-1">Active Layers</p>
               <div className="flex flex-wrap gap-2">
                 {activeLayers.map(layer => (
                   <span
@@ -157,7 +182,7 @@ export default function EarthImpactPage() {
               {layers.map(layer => (
                 <label
                   key={layer}
-                  className="flex items-center justify-between text-sm cursor-pointer hover:text-cyan-300 transition"
+                  className="flex items-center justify-between text-sm cursor-pointer"
                 >
                   <span className="text-white/80">{layer}</span>
                   <input
@@ -172,21 +197,27 @@ export default function EarthImpactPage() {
           </motion.div>
         </div>
 
-        {/* Impact Metrics */}
+        {/* ================= IMPACT METRICS ================= */}
         <div className="max-w-6xl mx-auto mt-10 grid sm:grid-cols-2 md:grid-cols-5 gap-4">
-          {impactStats.map(stat => (
+          {(data.impactStats || []).map(stat => (
             <div
               key={stat.label}
               className="glass card-hover rounded-xl p-4 text-center"
             >
-              <p className="text-xs text-white/60 mb-1">{stat.label}</p>
-              <p className="text-xl font-semibold text-cyan-300">{stat.value}</p>
-              <p className="text-xs text-white/50 mt-1">{stat.trend}</p>
+              <p className="text-xs text-white/60 mb-1">
+                {stat.label}
+              </p>
+              <p className="text-xl font-semibold text-cyan-300">
+                {stat.value}
+              </p>
+              <p className="text-xs text-white/50 mt-1">
+                {stat.trend}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Tabs */}
+        {/* ================= TABS ================= */}
         <div className="max-w-6xl mx-auto mt-12">
           <div className="flex gap-3 flex-wrap mb-6">
             {tabs.map(tab => (
@@ -196,7 +227,7 @@ export default function EarthImpactPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                   activeTab === tab
                     ? "bg-cyan-400 text-black glow-primary"
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    : "bg-white/10 hover:bg-white/20"
                 }`}
               >
                 {tab}
@@ -215,21 +246,21 @@ export default function EarthImpactPage() {
             </h3>
 
             <ul className="space-y-2 text-sm text-white/70">
-              {tabInsights[activeTab].map(item => (
+              {(data.tabInsights[activeTab] || []).map(item => (
                 <li key={item}>• {item}</li>
               ))}
             </ul>
           </motion.div>
         </div>
 
-        {/* Recent Events */}
+        {/* ================= RECENT EVENTS ================= */}
         <div className="max-w-6xl mx-auto mt-10 glass card-hover rounded-2xl p-6">
           <h3 className="text-lg font-medium mb-3">
             Recent Earth Events
           </h3>
           <ul className="space-y-2 text-sm text-white/70">
-            {recentEvents.map(e => (
-              <li key={e}>{e}</li>
+            {(data.recentEvents || []).map(event => (
+              <li key={event}>{event}</li>
             ))}
           </ul>
         </div>
